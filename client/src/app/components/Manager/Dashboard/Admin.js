@@ -23,6 +23,7 @@ import Brand from '../../../containers/Brand';
 import Merchant from '../../../containers/Merchant';
 import Review from '../../../containers/Review';
 import Wishlist from '../../../containers/WishList';
+import Staffs from '../../../containers/Staffs';
 
 const Admin = props => {
   return (
@@ -40,6 +41,7 @@ const Admin = props => {
               <Route path='/dashboard/product' component={Product} />
               <Route path='/dashboard/category' component={Category} />
               <Route path='/dashboard/brand' component={Brand} />
+              <Route path='/dashboard/staff' component={Staffs} />
               <Route path='/dashboard/users' component={Users} />
               <Route path='/dashboard/merchant' component={Merchant} />
               <Route path='/dashboard/orders' component={Order} />

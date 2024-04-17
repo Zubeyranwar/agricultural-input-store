@@ -195,6 +195,37 @@ export const updateOrderItemStatus = (itemId, status) => {
   };
 };
 
+export const fetchAllOrdersAction = () => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(`${API_URL}/order/me`);
+      console.log(response.data)
+      const result = response.data.allOrders.map((order) => ({
+        id: order._id,
+        location: order.locations[order.locations.length - 1],
+      }));
+      
+      
+
+      result.forEach((item) => {
+        const { id, location } = item;
+        const successfulOptions = {
+          title: `Order: ${id} \n Location: ${location}`,
+          position: 'tr',
+          autoDismiss: 1
+        };
+  
+        dispatch(success(successfulOptions));
+        console.log("Order", id, "is in", location);
+      });
+    } catch (error) {
+      console.error("Error fetching order :", error);
+    }
+  };
+};
+
+
+
 export const addOrder = () => {
   return async (dispatch, getState) => {
     try {

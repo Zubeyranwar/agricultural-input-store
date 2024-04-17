@@ -49,6 +49,10 @@ const CartSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  locations:{
+    type:Array,
+    default:['Store']
+  },
   updated: Date,
   created: {
     type: Date,

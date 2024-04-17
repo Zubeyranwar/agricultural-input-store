@@ -4,34 +4,41 @@
  *
  */
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import React, { useEffect } from "react";
 
-import store, { history } from './store';
-import { SocketProvider } from './contexts/Socket';
-import { SET_AUTH } from './containers/Authentication/constants';
-import Application from './containers/Application';
-import ScrollToTop from './scrollToTop';
-import setToken from './utils/token';
+import axios from "axios";
+import { API_URL } from "./constants";
+import toast,{ Toaster } from 'react-hot-toast';
+
+import { fetchAllOrdersAction } from "./containers/Order/actions"; // Import the fetchAllOrdersAction
+
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+
+import store, { history } from "./store";
+import { SocketProvider } from "./contexts/Socket";
+import { SET_AUTH } from "./containers/Authentication/constants";
+import Application from "./containers/Application";
+import ScrollToTop from "./scrollToTop";
+import setToken from "./utils/token";
 
 // Import application sass styles
-import './styles/style.scss';
+import "./styles/style.scss";
 
 // Import Font Awesome Icons Set
-import 'font-awesome/css/font-awesome.min.css';
+import "font-awesome/css/font-awesome.min.css";
 
 // Import Simple Line Icons Set
-import 'simple-line-icons/css/simple-line-icons.css';
+import "simple-line-icons/css/simple-line-icons.css";
 
 // react-bootstrap-table2 styles
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 // rc-slider style
-import 'rc-slider/assets/index.css';
+import "rc-slider/assets/index.css";
 
 // Authentication
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 
 if (token) {
   // authenticate api authorization
@@ -41,16 +48,44 @@ if (token) {
   store.dispatch({ type: SET_AUTH });
 }
 
-const app = () => (
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <SocketProvider>
-        <ScrollToTop>
-          <Application />
-        </ScrollToTop>
-      </SocketProvider>
-    </ConnectedRouter>
-  </Provider>
-);
+
+// const fetchAllOrders = async () => {
+//   try {
+//     const response = await axios.get(`${API_URL}/order/me`);
+//     const result = response.data.allOrders.map((order) => ({
+//       id: order._id,
+//       location: order.locations[order.locations.length - 1],
+//     }));
+
+//     result.forEach((item) => {
+//       const { id, location } = item;
+//       toast(`Order ${id} is in ${location}`);
+//       console.log("hellow world");
+//     });
+//   } catch (error) {
+//     console.error("Error fetching order :", error);
+//   }
+// };
+const app = () => {
+  useEffect(() => {
+    const fetchInterval = setInterval(() => {
+      store.dispatch(fetchAllOrdersAction());
+    }, 10000);
+
+    return () => clearInterval(fetchInterval);
+  }, []);
+  return (
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <SocketProvider>
+          <ScrollToTop>
+            <Application />
+            <Toaster position="top-right" reverseOrder={false} />
+          </ScrollToTop>
+        </SocketProvider>
+      </ConnectedRouter>
+    </Provider>
+  );
+};
 
 export default app;

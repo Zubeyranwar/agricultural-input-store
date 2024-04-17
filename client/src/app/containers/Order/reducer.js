@@ -23,7 +23,8 @@ const initialState = {
     products: [],
     totalTax: 0,
     total: 0,
-    status: ''
+    status: '',
+    locations:[]
   },
   isLoading: false,
   advancedFilters: {

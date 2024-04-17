@@ -166,6 +166,7 @@ router.get('/me', auth, async (req, res) => {
     const user = req.user._id;
     const query = { user };
 
+    const allOrders = await Order.find(query);
     const ordersDoc = await Order.find(query)
       .sort('-created')
       .populate({
@@ -185,6 +186,7 @@ router.get('/me', auth, async (req, res) => {
     const orders = store.formatOrders(ordersDoc);
 
     res.status(200).json({
+      allOrders,
       orders,
       totalPages: Math.ceil(count / limit),
       currentPage: Number(page),
@@ -233,13 +235,18 @@ router.get('/:orderId', auth, async (req, res) => {
       });
     }
 
+    const latestLocation = orderDoc.locations.length > 0
+      ? orderDoc.locations[orderDoc.locations.length - 1]
+      : '';
+
     let order = {
       _id: orderDoc._id,
       total: orderDoc.total,
       created: orderDoc.created,
       totalTax: 0,
       products: orderDoc?.cart?.products,
-      cartId: orderDoc.cart._id
+      cartId: orderDoc.cart._id,
+      latestLocation
     };
 
     order = store.caculateTaxAmount(order);
@@ -347,5 +354,42 @@ const increaseQuantity = products => {
 
   Product.bulkWrite(bulkOptions);
 };
+
+router.put('/location/:orderId', auth, async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const { locations } = req.body; // Assuming the frontend sends an array of location names
+
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        message: `Order not found with id: ${orderId}`
+      });
+    }
+
+    // Push new locations to the existing array
+    order.locations.push(...locations);
+    const updatedOrder = await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'New locations added to order successfully',
+      order: updatedOrder
+    });
+  } catch (error) {
+    console.error("Error updating order location:", error);
+    res.status(400).json({
+      error: 'Your request could not be processed. Please try again.'
+    });
+  }
+});
+
+
+
+
+
+
 
 module.exports = router;
