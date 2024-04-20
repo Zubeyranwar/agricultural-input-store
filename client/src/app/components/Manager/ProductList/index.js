@@ -11,13 +11,14 @@ import { Link } from 'react-router-dom';
 const ProductList = props => {
   const { products } = props;
 
+  
   return (
     <div className='p-list'>
       {products.map((product, index) => (
         <Link
-          to={`/dashboard/product/edit/${product._id}`}
-          key={index}
-          className='d-flex flex-row align-items-center mx-0 mb-3 product-box'
+        to={`/dashboard/product/edit/${product._id}`}
+        key={index}
+        className='d-flex flex-row align-items-center mx-0 mb-3 product-box'
         >
           <img
             className='item-image'
@@ -25,11 +26,13 @@ const ProductList = props => {
               product && product.imageUrl
                 ? product.imageUrl
                 : '/images/placeholder-image.png'
-            }`}
-          />
+              }`}
+              />
           <div className='d-flex flex-column justify-content-center px-3 text-truncate'>
             <h4 className='text-truncate'>{product.name}</h4>
             <p className='mb-2 text-truncate'>{product.description}</p>
+              <p className='mb-0'>Expiration Date: {product.expirationDate?.substring(0, product.expirationDate?.indexOf('T'))}</p>
+              {/* {console.log(product.expirationDate?.substring(0, product.expirationDate?.indexOf('T')))} */}
           </div>
         </Link>
       ))}

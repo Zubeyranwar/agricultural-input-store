@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, firstName, lastName, password, isSubscribed } = req.body;
+    const { email, firstName, lastName, password, isSubscribed, branch } = req.body;
 
     if (!email) {
       return res
@@ -119,7 +119,8 @@ router.post('/register', async (req, res) => {
       email,
       password,
       firstName,
-      lastName
+      lastName,
+      branch
     });
 
     const salt = await bcrypt.genSalt(10);

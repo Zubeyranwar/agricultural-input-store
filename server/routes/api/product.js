@@ -270,6 +270,7 @@ router.post(
       const isActive = req.body.isActive;
       const brand = req.body.brand;
       const image = req.file;
+      const expirationDate = req.body.expirationDate;
 
       if (!sku) {
         return res.status(400).json({ error: 'You must enter sku.' });
@@ -307,7 +308,8 @@ router.post(
         isActive,
         brand,
         imageUrl,
-        imageKey
+        imageKey,
+        expirationDate
       });
 
       const savedProduct = await product.save();

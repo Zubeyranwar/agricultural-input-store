@@ -45,7 +45,8 @@ const initialState = {
     brand: {
       value: 0,
       label: 'No Options Selected'
-    }
+    },
+    expirdationDate:null
   },
   isLoading: false,
   productShopData: {
@@ -176,7 +177,8 @@ const productReducer = (state = initialState, action) => {
         product: {
           _id: ''
         },
-        formErrors: {}
+        formErrors: {},
+        expirdationDate:null
       };
     case RESET_PRODUCT_SHOP:
       return {

@@ -8,6 +8,9 @@ import React from 'react';
 
 import { Row, Col } from 'reactstrap';
 
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { ROLES } from '../../../constants';
 import Input from '../../Common/Input';
 import Switch from '../../Common/Switch';
@@ -73,6 +76,18 @@ const AddProduct = props => {
               name={'description'}
               placeholder={'Product Description'}
               value={productFormData.description}
+              onInputChange={(name, value) => {
+                productChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs='12' md='12'>
+            <Input
+              type={'date'}
+              error={formErrors['expirationDate']}
+              label={'Expiration Date'}
+              name={'expirationDate'}
+              value={productFormData.expirationDate}
               onInputChange={(name, value) => {
                 productChange(name, value);
               }}

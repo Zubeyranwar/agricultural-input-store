@@ -14,8 +14,8 @@ import Newsletter from '../../../containers/Newsletter';
 const Footer = () => {
   const infoLinks = [
     { id: 0, name: 'Contact Us', to: '/contact' },
-    { id: 1, name: 'Sell With Us', to: '/sell' },
-    { id: 2, name: 'Shipping', to: '/shipping' }
+    // { id: 1, name: 'Sell With Us', to: '/sell' },
+    // { id: 2, name: 'Shipping', to: '/shipping' }
   ];
 
   const footerBusinessLinks = (
@@ -44,14 +44,6 @@ const Footer = () => {
           <div className='footer-block'>
             <div className='block-title'>
               <h3 className='text-uppercase'>Customer Service</h3>
-            </div>
-            <div className='block-content'>
-              <ul>{footerLinks}</ul>
-            </div>
-          </div>
-          <div className='footer-block'>
-            <div className='block-title'>
-              <h3 className='text-uppercase'>Links</h3>
             </div>
             <div className='block-content'>
               <ul>{footerLinks}</ul>

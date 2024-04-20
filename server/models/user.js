@@ -54,7 +54,10 @@ const UserSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
-  }
+  },
+  branch:{
+    type:String,
+  },
 });
 
 module.exports = Mongoose.model('User', UserSchema);

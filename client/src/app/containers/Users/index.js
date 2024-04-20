@@ -51,12 +51,16 @@ class Users extends React.PureComponent {
   render() {
     const { users, isLoading, searchedUsers, searchUsers, advancedFilters } =
       this.props;
-
+    // console.log(users)
+    const members = users.filter(user=>(user?.role === "ROLE MEMBER"));
+    console.log(members)
     const { search } = this.state;
     const isSearch = search.length > 0;
     const filteredUsers = search ? searchedUsers : users;
     const displayPagination = advancedFilters.totalPages > 1;
     const displayUsers = filteredUsers && filteredUsers.length > 0;
+    
+    
 
     return (
       <div className='users-dashboard'>

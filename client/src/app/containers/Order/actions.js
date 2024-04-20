@@ -6,7 +6,8 @@
 
 import { push } from 'connected-react-router';
 import axios from 'axios';
-import { success } from 'react-notification-system-redux';
+import { success,info } from 'react-notification-system-redux';
+import { ROLES } from '../../constants';
 
 import {
   FETCH_ORDERS,
@@ -195,34 +196,127 @@ export const updateOrderItemStatus = (itemId, status) => {
   };
 };
 
-export const fetchAllOrdersAction = () => {
-  return async (dispatch, getState) => {
-    try {
-      const response = await axios.get(`${API_URL}/order/me`);
-      console.log(response.data)
-      const result = response.data.allOrders.map((order) => ({
-        id: order._id,
-        location: order.locations[order.locations.length - 1],
-      }));
+// export const fetchAllOrdersAction = () => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await axios.get(`${API_URL}/order/me`);
+//       console.log(response.data)
+//       const result = response.data.allOrders.map((order) => ({
+//         id: order._id,
+//         location: order.locations[order.locations.length - 1],
+//       }));
       
       
 
-      result.forEach((item) => {
-        const { id, location } = item;
-        const successfulOptions = {
-          title: `Order: ${id} \n Location: ${location}`,
-          position: 'tr',
-          autoDismiss: 1
-        };
+//       result.forEach((item) => {
+//         const { id, location } = item;
+//         const successfulOptions = {
+//           title: `Order: ${id} \n Location: ${location}`,
+//           position: 'tr',
+//           autoDismiss: 1
+//         };
   
-        dispatch(success(successfulOptions));
-        console.log("Order", id, "is in", location);
+//         dispatch(success(successfulOptions));
+//         console.log("Order", id, "is in", location);
+//       });
+//     } catch (error) {
+//       console.error("Error fetching order :", error);
+//     }
+//   };
+// };
+
+// export const fetchAllOrdersAction = () => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await axios.get(`${API_URL}/order/me`);
+//       const allOrders = response.data.allOrders;
+//       const orders = response.data.orders;
+
+//       allOrders.forEach((allOrder) => {
+//         const orderId = allOrder._id;
+//         const location = allOrder.locations[allOrder.locations.length - 1];
+//         const order = orders.find((order) => order._id === orderId);
+//         if (order) {
+//           const products = order.products.map((product) => ({
+//             name: product.product.name,
+//             status: product.status
+//           }));
+
+//           // Construct the message for each order
+//           let orderMessage = `Order Id: ${orderId}\n`;
+//           products.forEach((product) => {
+//             orderMessage += `Product: ${product.name}   Status: ${product.status}\n`;
+//           });
+//           orderMessage += "------\nLocation: " + location;
+
+//           const successfulOptions = {
+//             title: orderMessage,
+//             position: 'tr',
+//             autoDismiss: 1
+//           };
+
+//           dispatch(success(successfulOptions));
+//         }
+//       });
+//     } catch (error) {
+//       console.error("Error fetching order :", error);
+//     }
+//   };
+// };
+
+export const fetchAllOrdersAction = () => {
+  return async (dispatch, getState) => {
+    try { // Assuming you have access to the user's role in your Redux state
+      // if (getState().account.user.role != "ROLE MEMBER")
+      //   return
+    
+      const response = await axios.get(`${API_URL}/order/me`);
+      const allOrders = response.data.allOrders;
+      const orders = response.data.orders;
+
+      allOrders.forEach((allOrder) => {
+        const orderId = allOrder._id;
+        const orderLocation = allOrder.locations[allOrder.locations.length - 1];
+        const order = orders.find((order) => order._id === orderId);
+        if (order) {
+          const products = order.products;
+
+          products.forEach((product, index) => {
+            const productName = product.product.name;
+            const productStatus = product.status;
+            let includeLocation = false;
+
+            // Check if product status is "Shipped"
+            if (productStatus === "Shipped") {
+              includeLocation = true;
+            }
+
+            // Construct the message for each product
+            let orderMessage = `Order Id: ${orderId}\n`;
+            orderMessage += `Product Name: ${productName}\n`;
+            orderMessage += `Status: ${productStatus}\n`;
+
+            // Include location in the message if at least one product is shipped
+            if (includeLocation) {
+              orderMessage += `Location: ${orderLocation}\n`;
+            }
+
+            const successfulOptions = {
+              title: orderMessage,
+              position: 'tr',
+              autoDismiss: 10
+            };
+
+            dispatch(info(successfulOptions));
+          });
+        }
       });
     } catch (error) {
       console.error("Error fetching order :", error);
     }
   };
 };
+
 
 
 

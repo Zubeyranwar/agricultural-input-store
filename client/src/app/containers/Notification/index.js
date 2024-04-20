@@ -25,7 +25,7 @@ class Notification extends React.PureComponent {
 
         success: {
           color: 'red'
-        }
+        },
       }
     };
     return <Notifications notifications={notifications} style={style} />;

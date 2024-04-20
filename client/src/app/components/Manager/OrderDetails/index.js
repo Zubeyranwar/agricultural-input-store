@@ -32,13 +32,31 @@ const OrderDetails = (props) => {
   const [orderLocation, setOrderLocation] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [currentLocationText, setCurrentLocationText] = useState("");
-
+  const [deliveryAddress, setDeliveryAddress] = useState("");
 
   useEffect(() => {
     fetchCurrentLocation();
   }, []);
-    
+  
 
+  useEffect(() => {
+    fetchDeliveryAddress();
+  }, []);
+
+  const fetchDeliveryAddress = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/address`); 
+      const defaultAddress = response.data.addresses.find(address => address.isDefault); 
+      if (defaultAddress) {
+        setDeliveryAddress(defaultAddress.address);
+        console.log(defaultAddress.address)
+      } else {
+        console.log("No default address found.");
+      }
+    } catch (error) {
+      console.error("Error fetching delivery address:", error);
+    }
+  };
   const fetchCurrentLocation = async () => {
     try {
       const orderId = order._id;
@@ -163,8 +181,9 @@ const OrderDetails = (props) => {
         </Col>
         <Col xs="12" lg="4" className="mt-5 mt-lg-0">
           <div>
-            <h2>Order Location</h2>
-            <p>Current Location: {currentLocationText || " At Store"} </p>
+            <h2>Order Shipping</h2>
+            <p>Shipping Address: {deliveryAddress || "No address found"}</p>
+            <p>Delivery Current Address: {currentLocationText || " At Store"} </p>
             {renderLocationUpdate()}
           </div>
         </Col>

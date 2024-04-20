@@ -6,20 +6,18 @@
 
 import React, { useEffect } from "react";
 
-import axios from "axios";
-import { API_URL } from "./constants";
-import toast,{ Toaster } from 'react-hot-toast';
 
-import { fetchAllOrdersAction } from "./containers/Order/actions"; // Import the fetchAllOrdersAction
+import { fetchAllOrdersAction } from "./containers/Order/actions"; 
+import { fetchProducts } from "./containers/Product/actions"
 
-import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
+import { Provider } from "react-redux";
 
-import store, { history } from "./store";
-import { SocketProvider } from "./contexts/Socket";
-import { SET_AUTH } from "./containers/Authentication/constants";
 import Application from "./containers/Application";
+import { SET_AUTH } from "./containers/Authentication/constants";
+import { SocketProvider } from "./contexts/Socket";
 import ScrollToTop from "./scrollToTop";
+import store, { history } from "./store";
 import setToken from "./utils/token";
 
 // Import application sass styles
@@ -70,7 +68,8 @@ const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchAllOrdersAction());
-    }, 10000);
+      store.dispatch(fetchProducts());
+    }, 100000);
 
     return () => clearInterval(fetchInterval);
   }, []);
@@ -80,7 +79,6 @@ const app = () => {
         <SocketProvider>
           <ScrollToTop>
             <Application />
-            <Toaster position="top-right" reverseOrder={false} />
           </ScrollToTop>
         </SocketProvider>
       </ConnectedRouter>
