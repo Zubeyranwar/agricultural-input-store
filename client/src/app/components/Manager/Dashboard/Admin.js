@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
@@ -25,7 +25,19 @@ import Review from '../../../containers/Review';
 import Wishlist from '../../../containers/WishList';
 import Staffs from '../../../containers/Staffs';
 
+import { fetchProducts } from '../../../containers/Product/actions';
+
+import store from '../../../store';
+
 const Admin = props => {
+  console.log(props)
+  useEffect(() => {
+    const fetchInterval = setInterval(() => {
+      store.dispatch(fetchProducts());
+    }, 10000);
+
+    return () => clearInterval(fetchInterval);
+  }, []);
   return (
     <div className='admin'>
       <Row>

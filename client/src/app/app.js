@@ -12,7 +12,6 @@ import { fetchProducts } from "./containers/Product/actions"
 
 import { ConnectedRouter } from "connected-react-router";
 import { Provider } from "react-redux";
-
 import Application from "./containers/Application";
 import { SET_AUTH } from "./containers/Authentication/constants";
 import { SocketProvider } from "./contexts/Socket";
@@ -68,8 +67,8 @@ const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchAllOrdersAction());
-      store.dispatch(fetchProducts());
-    }, 100000);
+      // user.role === ROLES.Merchant && store.dispatch(fetchProducts());
+    }, 10000);
 
     return () => clearInterval(fetchInterval);
   }, []);
