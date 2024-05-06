@@ -36,6 +36,7 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     fetchCurrentLocation();
+    
   }, []);
   
 

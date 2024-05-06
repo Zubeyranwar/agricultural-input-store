@@ -8,7 +8,6 @@ import React, { useEffect } from "react";
 
 
 import { fetchAllOrdersAction } from "./containers/Order/actions"; 
-import { fetchProducts } from "./containers/Product/actions"
 
 import { ConnectedRouter } from "connected-react-router";
 import { Provider } from "react-redux";
@@ -67,8 +66,7 @@ const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchAllOrdersAction());
-      // user.role === ROLES.Merchant && store.dispatch(fetchProducts());
-    }, 10000);
+    }, 3000);
 
     return () => clearInterval(fetchInterval);
   }, []);

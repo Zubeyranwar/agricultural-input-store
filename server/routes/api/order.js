@@ -45,7 +45,8 @@ router.post('/add', auth, async (req, res) => {
     res.status(200).json({
       success: true,
       message: `Your order has been placed successfully!`,
-      order: { _id: orderDoc._id }
+      order: { _id: orderDoc._id },
+      user: {user:orderDoc.user}
     });
   } catch (error) {
     res.status(400).json({
@@ -190,7 +191,7 @@ router.get('/me', auth, async (req, res) => {
       orders,
       totalPages: Math.ceil(count / limit),
       currentPage: Number(page),
-      count
+      count,
     });
   } catch (error) {
     res.status(400).json({

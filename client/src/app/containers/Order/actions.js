@@ -266,13 +266,11 @@ export const updateOrderItemStatus = (itemId, status) => {
 
 export const fetchAllOrdersAction = () => {
   return async (dispatch, getState) => {
-    try { // Assuming you have access to the user's role in your Redux state
-      // if (getState().account.user.role != "ROLE MEMBER")
-      //   return
-    
+    try { 
       const response = await axios.get(`${API_URL}/order/me`);
       const allOrders = response.data.allOrders;
       const orders = response.data.orders;
+      
 
       allOrders.forEach((allOrder) => {
         const orderId = allOrder._id;
