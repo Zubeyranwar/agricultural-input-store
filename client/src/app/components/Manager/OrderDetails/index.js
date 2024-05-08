@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { success } from 'react-notification-system-redux';
+import { success } from "react-notification-system-redux";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -32,32 +32,27 @@ const OrderDetails = (props) => {
   const [orderLocation, setOrderLocation] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [currentLocationText, setCurrentLocationText] = useState("");
-  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [shippingAddress, setShippingAddress] = useState("");
 
   useEffect(() => {
     fetchCurrentLocation();
-    
-  }, []);
-  
-
-  useEffect(() => {
-    fetchDeliveryAddress();
+    fetchShippingAddress();
   }, []);
 
-  const fetchDeliveryAddress = async () => {
+  const fetchShippingAddress = async () => {
     try {
-      const response = await axios.get(`${API_URL}/address`); 
-      const defaultAddress = response.data.addresses.find(address => address.isDefault); 
+      const response = await axios.get(`${API_URL}/address/user/${order.user}`);
+      const defaultAddress = response.data.address;
       if (defaultAddress) {
-        setDeliveryAddress(defaultAddress.address);
-        console.log(defaultAddress.address)
+        setShippingAddress(defaultAddress.address);
       } else {
         console.log("No default address found.");
       }
     } catch (error) {
-      console.error("Error fetching delivery address:", error);
+      console.error("Error fetching shipping address:", error);
     }
   };
+
   const fetchCurrentLocation = async () => {
     try {
       const orderId = order._id;
@@ -97,7 +92,7 @@ const OrderDetails = (props) => {
       console.log("Update Location response:", response.data);
 
       toast("Location Update succefully");
-      console.log(response.data.order.locations)
+      console.log(response.data.order.locations);
     } catch (error) {
       toast(`Error updating location: ${error}`);
     }
@@ -183,8 +178,12 @@ const OrderDetails = (props) => {
         <Col xs="12" lg="4" className="mt-5 mt-lg-0">
           <div>
             <h2>Order Shipping</h2>
-            <p>Shipping Address: {deliveryAddress || "No address found"}</p>
-            <p>Delivery Current Address: {currentLocationText || " At Store"} </p>
+            {user.role === ROLES.Admin && (
+              <p>Shipping Address:{shippingAddress || "not yet implmented"}</p>
+            )}
+            <p>
+              Delivery Current Address: {currentLocationText || " At Store"}{" "}
+            </p>
             {renderLocationUpdate()}
           </div>
         </Col>

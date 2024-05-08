@@ -55,6 +55,8 @@ router.post('/add', auth, async (req, res) => {
   }
 });
 
+
+
 // search orders api
 router.get('/search', auth, async (req, res) => {
   try {
@@ -247,7 +249,8 @@ router.get('/:orderId', auth, async (req, res) => {
       totalTax: 0,
       products: orderDoc?.cart?.products,
       cartId: orderDoc.cart._id,
-      latestLocation
+      latestLocation,
+      user:orderDoc.user
     };
 
     order = store.caculateTaxAmount(order);

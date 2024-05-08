@@ -6,8 +6,7 @@
 
 import React, { useEffect } from "react";
 
-
-import { fetchAllOrdersAction } from "./containers/Order/actions"; 
+import { fetchAllOrdersAction } from "./containers/Order/actions";
 
 import { ConnectedRouter } from "connected-react-router";
 import { Provider } from "react-redux";
@@ -44,7 +43,6 @@ if (token) {
   store.dispatch({ type: SET_AUTH });
 }
 
-
 // const fetchAllOrders = async () => {
 //   try {
 //     const response = await axios.get(`${API_URL}/order/me`);
@@ -66,7 +64,7 @@ const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchAllOrdersAction());
-    }, 3000);
+    }, 3000000);
 
     return () => clearInterval(fetchInterval);
   }, []);

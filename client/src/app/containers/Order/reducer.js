@@ -24,7 +24,8 @@ const initialState = {
     totalTax: 0,
     total: 0,
     status: '',
-    locations:[]
+    locations:[],
+    user: ''
   },
   isLoading: false,
   advancedFilters: {

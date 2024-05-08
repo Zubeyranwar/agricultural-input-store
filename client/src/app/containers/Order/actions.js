@@ -4,10 +4,10 @@
  *
  */
 
-import { push } from 'connected-react-router';
-import axios from 'axios';
-import { success,info } from 'react-notification-system-redux';
-import { ROLES } from '../../constants';
+import { push } from "connected-react-router";
+import axios from "axios";
+import { success, info } from "react-notification-system-redux";
+import { ROLES } from "../../constants";
 
 import {
   FETCH_ORDERS,
@@ -16,25 +16,25 @@ import {
   UPDATE_ORDER_STATUS,
   SET_ORDERS_LOADING,
   SET_ADVANCED_FILTERS,
-  CLEAR_ORDERS
-} from './constants';
+  CLEAR_ORDERS,
+} from "./constants";
 
-import { clearCart, getCartId } from '../Cart/actions';
-import { toggleCart } from '../Navigation/actions';
-import handleError from '../../utils/error';
-import { API_URL } from '../../constants';
+import { clearCart, getCartId } from "../Cart/actions";
+import { toggleCart } from "../Navigation/actions";
+import handleError from "../../utils/error";
+import { API_URL } from "../../constants";
 
-export const updateOrderStatus = value => {
+export const updateOrderStatus = (value) => {
   return {
     type: UPDATE_ORDER_STATUS,
-    payload: value
+    payload: value,
   };
 };
 
-export const setOrderLoading = value => {
+export const setOrderLoading = (value) => {
   return {
     type: SET_ORDERS_LOADING,
-    payload: value
+    payload: value,
   };
 };
 
@@ -46,20 +46,20 @@ export const fetchOrders = (page = 1) => {
       const response = await axios.get(`${API_URL}/order`, {
         params: {
           page: page ?? 1,
-          limit: 20
-        }
+          limit: 20,
+        },
       });
 
-      const { orders, totalPages, currentPage, count } = response.data;
+      const { orders, totalPages, currentPage, count, user } = response.data;
 
       dispatch({
         type: FETCH_ORDERS,
-        payload: orders
+        payload: orders,
       });
 
       dispatch({
         type: SET_ADVANCED_FILTERS,
-        payload: { totalPages, currentPage, count }
+        payload: { totalPages, currentPage, count },
       });
     } catch (error) {
       dispatch(clearOrders());
@@ -78,20 +78,20 @@ export const fetchAccountOrders = (page = 1) => {
       const response = await axios.get(`${API_URL}/order/me`, {
         params: {
           page: page ?? 1,
-          limit: 20
-        }
+          limit: 20,
+        },
       });
 
       const { orders, totalPages, currentPage, count } = response.data;
 
       dispatch({
         type: FETCH_ORDERS,
-        payload: orders
+        payload: orders,
       });
 
       dispatch({
         type: SET_ADVANCED_FILTERS,
-        payload: { totalPages, currentPage, count }
+        payload: { totalPages, currentPage, count },
       });
     } catch (error) {
       dispatch(clearOrders());
@@ -102,20 +102,20 @@ export const fetchAccountOrders = (page = 1) => {
   };
 };
 
-export const searchOrders = filter => {
+export const searchOrders = (filter) => {
   return async (dispatch, getState) => {
     try {
       dispatch(setOrderLoading(true));
 
       const response = await axios.get(`${API_URL}/order/search`, {
         params: {
-          search: filter.value
-        }
+          search: filter.value,
+        },
       });
 
       dispatch({
         type: FETCH_SEARCHED_ORDERS,
-        payload: response.data.orders
+        payload: response.data.orders,
       });
     } catch (error) {
       handleError(error, dispatch);
@@ -136,7 +136,7 @@ export const fetchOrder = (id, withLoading = true) => {
 
       dispatch({
         type: FETCH_ORDER,
-        payload: response.data.order
+        payload: response.data.order,
       });
     } catch (error) {
       handleError(error, dispatch);
@@ -172,7 +172,7 @@ export const updateOrderItemStatus = (itemId, status) => {
         {
           orderId: order._id,
           cartId: order.cartId,
-          status
+          status,
         }
       );
 
@@ -185,8 +185,8 @@ export const updateOrderItemStatus = (itemId, status) => {
 
       const successfulOptions = {
         title: `${response.data.message}`,
-        position: 'tr',
-        autoDismiss: 1
+        position: "tr",
+        autoDismiss: 1,
       };
 
       dispatch(success(successfulOptions));
@@ -205,8 +205,6 @@ export const updateOrderItemStatus = (itemId, status) => {
 //         id: order._id,
 //         location: order.locations[order.locations.length - 1],
 //       }));
-      
-      
 
 //       result.forEach((item) => {
 //         const { id, location } = item;
@@ -215,7 +213,7 @@ export const updateOrderItemStatus = (itemId, status) => {
 //           position: 'tr',
 //           autoDismiss: 1
 //         };
-  
+
 //         dispatch(success(successfulOptions));
 //         console.log("Order", id, "is in", location);
 //       });
@@ -266,11 +264,10 @@ export const updateOrderItemStatus = (itemId, status) => {
 
 export const fetchAllOrdersAction = () => {
   return async (dispatch, getState) => {
-    try { 
+    try {
       const response = await axios.get(`${API_URL}/order/me`);
       const allOrders = response.data.allOrders;
       const orders = response.data.orders;
-      
 
       allOrders.forEach((allOrder) => {
         const orderId = allOrder._id;
@@ -301,8 +298,8 @@ export const fetchAllOrdersAction = () => {
 
             const successfulOptions = {
               title: orderMessage,
-              position: 'tr',
-              autoDismiss: 10
+              position: "tr",
+              autoDismiss: 10,
             };
 
             dispatch(info(successfulOptions));
@@ -315,19 +312,16 @@ export const fetchAllOrdersAction = () => {
   };
 };
 
-
-
-
 export const addOrder = () => {
   return async (dispatch, getState) => {
     try {
-      const cartId = localStorage.getItem('cart_id');
+      const cartId = localStorage.getItem("cart_id");
       const total = getState().cart.cartTotal;
 
       if (cartId) {
         const response = await axios.post(`${API_URL}/order/add`, {
           cartId,
-          total
+          total,
         });
 
         dispatch(push(`/order/success/${response.data.order._id}`));
@@ -341,7 +335,7 @@ export const addOrder = () => {
 
 export const placeOrder = () => {
   return (dispatch, getState) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const cartItems = getState().cart.cartItems;
 
@@ -357,6 +351,6 @@ export const placeOrder = () => {
 
 export const clearOrders = () => {
   return {
-    type: CLEAR_ORDERS
+    type: CLEAR_ORDERS,
   };
 };
