@@ -1,38 +1,41 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 // Bring in Models & Helpers
-const { MERCHANT_STATUS, ROLES } = require('../../constants');
-const Merchant = require('../../models/merchant');
-const User = require('../../models/user');
-const Brand = require('../../models/brand');
-const auth = require('../../middleware/auth');
-const role = require('../../middleware/role');
-const mailgun = require('../../services/mailgun');
+const { MERCHANT_STATUS, ROLES } = require("../../constants");
+const Merchant = require("../../models/merchant");
+const User = require("../../models/user");
+const Brand = require("../../models/brand");
+const auth = require("../../middleware/auth");
+const role = require("../../middleware/role");
+const mailgun = require("../../services/mailgun");
 
 // add merchant api
-router.post('/add', async (req, res) => {
+router.post("/add", async (req, res) => {
   try {
-    const { name, business, phoneNumber, email, brandName } = req.body;
+    const { name, business, phoneNumber, email, brandName, branch } = req.body;
 
     if (!name || !email) {
       return res
         .status(400)
-        .json({ error: 'You must enter your name and email.' });
+        .json({ error: "You must enter your name and email." });
     }
 
+    if (!branch) {
+      return res.status(400).json({ error: "You must enter a branch ." });
+    }
     if (!business) {
       return res
         .status(400)
-        .json({ error: 'You must enter a business description.' });
+        .json({ error: "You must enter a business description." });
     }
 
     if (!phoneNumber || !email) {
       return res
         .status(400)
-        .json({ error: 'You must enter a phone number and an email address.' });
+        .json({ error: "You must enter a phone number and an email address." });
     }
 
     const existingMerchant = await Merchant.findOne({ email });
@@ -40,7 +43,7 @@ router.post('/add', async (req, res) => {
     if (existingMerchant) {
       return res
         .status(400)
-        .json({ error: 'That email address is already in use.' });
+        .json({ error: "That email address is already in use." });
     }
 
     const merchant = new Merchant({
@@ -48,30 +51,31 @@ router.post('/add', async (req, res) => {
       email,
       business,
       phoneNumber,
-      brandName
+      brandName,
+      branch,
     });
     const merchantDoc = await merchant.save();
 
-    await mailgun.sendEmail(email, 'merchant-application');
+    await mailgun.sendEmail(email, "merchant-application");
 
     res.status(200).json({
       success: true,
       message: `We received your request! we will reach you on your phone number ${phoneNumber}!`,
-      merchant: merchantDoc
+      merchant: merchantDoc,
     });
   } catch (error) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // search merchants api
-router.get('/search', auth, role.check(ROLES.Admin), async (req, res) => {
+router.get("/search", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const { search } = req.query;
 
-    const regex = new RegExp(search, 'i');
+    const regex = new RegExp(search, "i");
 
     const merchants = await Merchant.find({
       $or: [
@@ -79,28 +83,29 @@ router.get('/search', auth, role.check(ROLES.Admin), async (req, res) => {
         { email: { $regex: regex } },
         { name: { $regex: regex } },
         { brandName: { $regex: regex } },
-        { status: { $regex: regex } }
-      ]
-    }).populate('brand', 'name');
+        { branch: { $regex: regex } },
+        { status: { $regex: regex } },
+      ],
+    }).populate("brand", "name");
 
     res.status(200).json({
-      merchants
+      merchants,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // fetch all merchants api
-router.get('/', auth, role.check(ROLES.Admin), async (req, res) => {
+router.get("/", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
     const merchants = await Merchant.find()
-      .populate('brand')
-      .sort('-created')
+      .populate("brand")
+      .sort("-created")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
@@ -111,53 +116,53 @@ router.get('/', auth, role.check(ROLES.Admin), async (req, res) => {
       merchants,
       totalPages: Math.ceil(count / limit),
       currentPage: Number(page),
-      count
+      count,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // disable merchant account
-router.put('/:id/active', auth, async (req, res) => {
+router.put("/:id/active", auth, async (req, res) => {
   try {
     const merchantId = req.params.id;
     const update = req.body.merchant;
     const query = { _id: merchantId };
 
     const merchantDoc = await Merchant.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
 
     if (!update.isActive) {
       await deactivateBrand(merchantId);
-      await mailgun.sendEmail(merchantDoc.email, 'merchant-deactivate-account');
+      await mailgun.sendEmail(merchantDoc.email, "merchant-deactivate-account");
     }
 
     res.status(200).json({
-      success: true
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // approve merchant
-router.put('/approve/:id', auth, async (req, res) => {
+router.put("/approve/:id", auth, async (req, res) => {
   try {
     const merchantId = req.params.id;
     const query = { _id: merchantId };
     const update = {
       status: MERCHANT_STATUS.Approved,
-      isActive: true
+      isActive: true,
     };
 
     const merchantDoc = await Merchant.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
 
     await createMerchantUser(
@@ -168,60 +173,60 @@ router.put('/approve/:id', auth, async (req, res) => {
     );
 
     res.status(200).json({
-      success: true
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // reject merchant
-router.put('/reject/:id', auth, async (req, res) => {
+router.put("/reject/:id", auth, async (req, res) => {
   try {
     const merchantId = req.params.id;
 
     const query = { _id: merchantId };
     const update = {
-      status: MERCHANT_STATUS.Rejected
+      status: MERCHANT_STATUS.Rejected,
     };
 
     await Merchant.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
 
     res.status(200).json({
-      success: true
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
-router.post('/signup/:token', async (req, res) => {
+router.post("/signup/:token", async (req, res) => {
   try {
     const { email, firstName, lastName, password } = req.body;
 
     if (!email) {
       return res
         .status(400)
-        .json({ error: 'You must enter an email address.' });
+        .json({ error: "You must enter an email address." });
     }
 
     if (!firstName || !lastName) {
-      return res.status(400).json({ error: 'You must enter your full name.' });
+      return res.status(400).json({ error: "You must enter your full name." });
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' });
+      return res.status(400).json({ error: "You must enter a password." });
     }
 
     const userDoc = await User.findOne({
       email,
-      resetPasswordToken: req.params.token
+      resetPasswordToken: req.params.token,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -233,31 +238,31 @@ router.post('/signup/:token', async (req, res) => {
       firstName,
       lastName,
       password: hash,
-      resetPasswordToken: undefined
+      resetPasswordToken: undefined,
     };
 
     await User.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
 
     const merchantDoc = await Merchant.findOne({
-      email
+      email,
     });
 
     await createMerchantBrand(merchantDoc);
 
     res.status(200).json({
-      success: true
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 router.delete(
-  '/delete/:id',
+  "/delete/:id",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
@@ -269,29 +274,29 @@ router.delete(
       res.status(200).json({
         success: true,
         message: `Merchant has been deleted successfully!`,
-        merchant
+        merchant,
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
 );
 
-const deactivateBrand = async merchantId => {
+const deactivateBrand = async (merchantId) => {
   const merchantDoc = await Merchant.findOne({ _id: merchantId }).populate(
-    'brand',
-    '_id'
+    "brand",
+    "_id"
   );
   if (!merchantDoc || !merchantDoc.brand) return;
   const brandId = merchantDoc.brand._id;
   const query = { _id: brandId };
   const update = {
-    isActive: false
+    isActive: false,
   };
   return await Brand.findOneAndUpdate(query, update, {
-    new: true
+    new: true,
   });
 };
 
@@ -300,20 +305,20 @@ const createMerchantBrand = async ({ _id, brandName, business }) => {
     name: brandName,
     description: business,
     merchant: _id,
-    isActive: false
+    isActive: false,
   });
 
   const brandDoc = await newBrand.save();
 
   const update = {
-    brand: brandDoc._id
+    brand: brandDoc._id,
   };
   await Merchant.findOneAndUpdate({ _id }, update);
 };
 
 const createMerchantUser = async (email, name, merchant, host) => {
   const firstName = name;
-  const lastName = '';
+  const lastName = "";
 
   const existingUser = await User.findOne({ email });
 
@@ -321,23 +326,23 @@ const createMerchantUser = async (email, name, merchant, host) => {
     const query = { _id: existingUser._id };
     const update = {
       merchant,
-      role: ROLES.Merchant
+      role: ROLES.Merchant,
     };
 
     const merchantDoc = await Merchant.findOne({
-      email
+      email,
     });
 
     await createMerchantBrand(merchantDoc);
 
-    await mailgun.sendEmail(email, 'merchant-welcome', null, name);
+    await mailgun.sendEmail(email, "merchant-welcome", null, name);
 
     return await User.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
   } else {
     const buffer = await crypto.randomBytes(48);
-    const resetToken = buffer.toString('hex');
+    const resetToken = buffer.toString("hex");
     const resetPasswordToken = resetToken;
 
     const user = new User({
@@ -346,12 +351,12 @@ const createMerchantUser = async (email, name, merchant, host) => {
       lastName,
       resetPasswordToken,
       merchant,
-      role: ROLES.Merchant
+      role: ROLES.Merchant,
     });
 
-    await mailgun.sendEmail(email, 'merchant-signup', host, {
+    await mailgun.sendEmail(email, "merchant-signup", host, {
       resetToken,
-      email
+      email,
     });
 
     return await user.save();

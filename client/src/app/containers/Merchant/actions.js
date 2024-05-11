@@ -4,9 +4,9 @@
  *
  */
 
-import { push, goBack } from 'connected-react-router';
-import { success } from 'react-notification-system-redux';
-import axios from 'axios';
+import { push, goBack } from "connected-react-router";
+import { success } from "react-notification-system-redux";
+import axios from "axios";
 
 import {
   FETCH_MERCHANTS,
@@ -20,13 +20,13 @@ import {
   RESET_MERCHANT,
   SIGNUP_CHANGE,
   SET_SIGNUP_FORM_ERRORS,
-  SIGNUP_RESET
-} from './constants';
+  SIGNUP_RESET,
+} from "./constants";
 
-import handleError from '../../utils/error';
-import { allFieldsValidation } from '../../utils/validation';
-import { signOut } from '../Login/actions';
-import { API_URL } from '../../constants';
+import handleError from "../../utils/error";
+import { allFieldsValidation } from "../../utils/validation";
+import { signOut } from "../Login/actions";
+import { API_URL } from "../../constants";
 
 export const merchantChange = (name, value) => {
   let formData = {};
@@ -34,7 +34,7 @@ export const merchantChange = (name, value) => {
 
   return {
     type: MERCHANT_CHANGE,
-    payload: formData
+    payload: formData,
   };
 };
 
@@ -44,21 +44,21 @@ export const merchantSignupChange = (name, value) => {
 
   return {
     type: SIGNUP_CHANGE,
-    payload: formData
+    payload: formData,
   };
 };
 
-export const setMerchantLoading = value => {
+export const setMerchantLoading = (value) => {
   return {
     type: SET_MERCHANTS_LOADING,
-    payload: value
+    payload: value,
   };
 };
 
-export const setMerchantSubmitting = value => {
+export const setMerchantSubmitting = (value) => {
   return {
     type: SET_MERCHANTS_SUBMITTING,
-    payload: value
+    payload: value,
   };
 };
 
@@ -69,24 +69,26 @@ export const addMerchant = (isBack = false) => {
       const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
       const rules = {
-        name: 'required',
-        email: 'required|email',
-        phoneNumber: ['required', `regex:${phoneno}`],
-        brandName: 'required',
-        business: 'required|min:10'
+        name: "required",
+        email: "required|email",
+        phoneNumber: ["required", `regex:${phoneno}`],
+        brandName: "required",
+        business: "required|min:10",
+        branch: "required",
       };
 
       const merchant = getState().merchant.merchantFormData;
 
       const { isValid, errors } = allFieldsValidation(merchant, rules, {
-        'required.name': 'Name is required.',
-        'required.email': 'Email is required.',
-        'email.email': 'Email format is invalid.',
-        'required.phoneNumber': 'Phone number is required.',
-        'regex.phoneNumber': 'Phone number format is invalid.',
-        'required.brandName': 'Brand is required.',
-        'required.business': 'Business is required.',
-        'min.business': 'Business must be at least 10 characters.'
+        "required.name": "Name is required.",
+        "required.email": "Email is required.",
+        "email.email": "Email format is invalid.",
+        "required.phoneNumber": "Phone number is required.",
+        "regex.phoneNumber": "Phone number format is invalid.",
+        "required.brandName": "Brand is required.",
+        "required.business": "Business is required.",
+        "min.business": "Business must be at least 10 characters.",
+        "required.branch": "Branch is required.",
       });
 
       if (!isValid) {
@@ -100,8 +102,8 @@ export const addMerchant = (isBack = false) => {
 
       const successfulOptions = {
         title: `${response.data.message}`,
-        position: 'tr',
-        autoDismiss: 1
+        position: "tr",
+        autoDismiss: 1,
       };
 
       if (response.data.success === true) {
@@ -126,20 +128,20 @@ export const fetchMerchants = (n, v) => {
       const response = await axios.get(`${API_URL}/merchant`, {
         params: {
           page: v ?? 1,
-          limit: 20
-        }
+          limit: 20,
+        },
       });
 
       const { merchants, totalPages, currentPage, count } = response.data;
 
       dispatch({
         type: FETCH_MERCHANTS,
-        payload: merchants
+        payload: merchants,
       });
 
       dispatch({
         type: SET_ADVANCED_FILTERS,
-        payload: { totalPages, currentPage, count }
+        payload: { totalPages, currentPage, count },
       });
     } catch (error) {
       handleError(error, dispatch);
@@ -149,20 +151,20 @@ export const fetchMerchants = (n, v) => {
   };
 };
 
-export const searchMerchants = filter => {
+export const searchMerchants = (filter) => {
   return async (dispatch, getState) => {
     try {
       dispatch(setMerchantLoading(true));
 
       const response = await axios.get(`${API_URL}/merchant/search`, {
         params: {
-          search: filter.value
-        }
+          search: filter.value,
+        },
       });
 
       dispatch({
         type: FETCH_SEARCHED_MERCHANTS,
-        payload: response.data.merchants
+        payload: response.data.merchants,
       });
     } catch (error) {
       handleError(error, dispatch);
@@ -177,13 +179,13 @@ export const disableMerchant = (merchant, value, search, page) => {
     try {
       await axios.put(`${API_URL}/merchant/${merchant._id}/active`, {
         merchant: {
-          isActive: value
-        }
+          isActive: value,
+        },
       });
 
       if (search)
-        return dispatch(searchMerchants({ name: 'merchant', value: search })); // update search list if this is a search result
-      dispatch(fetchMerchants('merchant', page));
+        return dispatch(searchMerchants({ name: "merchant", value: search })); // update search list if this is a search result
+      dispatch(fetchMerchants("merchant", page));
     } catch (error) {
       handleError(error, dispatch);
     }
@@ -196,8 +198,8 @@ export const approveMerchant = (merchant, search, page) => {
       await axios.put(`${API_URL}/merchant/approve/${merchant._id}`);
 
       if (search)
-        return dispatch(searchMerchants({ name: 'merchant', value: search })); // update search list if this is a search result
-      dispatch(fetchMerchants('merchant', page));
+        return dispatch(searchMerchants({ name: "merchant", value: search })); // update search list if this is a search result
+      dispatch(fetchMerchants("merchant", page));
     } catch (error) {
       handleError(error, dispatch);
     }
@@ -210,31 +212,31 @@ export const rejectMerchant = (merchant, search, page) => {
       await axios.put(`${API_URL}/merchant/reject/${merchant._id}`);
 
       if (search)
-        return dispatch(searchMerchants({ name: 'merchant', value: search })); // update search list if this is a search result
-      dispatch(fetchMerchants('merchant', page));
+        return dispatch(searchMerchants({ name: "merchant", value: search })); // update search list if this is a search result
+      dispatch(fetchMerchants("merchant", page));
     } catch (error) {
       handleError(error, dispatch);
     }
   };
 };
 
-export const merchantSignUp = token => {
+export const merchantSignUp = (token) => {
   return async (dispatch, getState) => {
     try {
       const rules = {
-        email: 'required|email',
-        password: 'required|min:6',
-        firstName: 'required',
-        lastName: 'required'
+        email: "required|email",
+        password: "required|min:6",
+        firstName: "required",
+        lastName: "required",
       };
 
       const merchant = getState().merchant.signupFormData;
 
       const { isValid, errors } = allFieldsValidation(merchant, rules, {
-        'required.email': 'Email is required.',
-        'required.password': 'Password is required.',
-        'required.firstName': 'First Name is required.',
-        'required.lastName': 'Last Name is required.'
+        "required.email": "Email is required.",
+        "required.password": "Password is required.",
+        "required.firstName": "First Name is required.",
+        "required.lastName": "Last Name is required.",
       });
 
       if (!isValid) {
@@ -245,13 +247,13 @@ export const merchantSignUp = token => {
 
       const successfulOptions = {
         title: `You have signed up successfully! Please sign in with the email and password. Thank you!`,
-        position: 'tr',
-        autoDismiss: 1
+        position: "tr",
+        autoDismiss: 1,
       };
 
       dispatch(signOut());
       dispatch(success(successfulOptions));
-      dispatch(push('/login'));
+      dispatch(push("/login"));
       dispatch({ type: SIGNUP_RESET });
     } catch (error) {
       const title = `Please try to signup again!`;
@@ -270,17 +272,17 @@ export const deleteMerchant = (merchant, search, page) => {
 
       const successfulOptions = {
         title: `${response.data.message}`,
-        position: 'tr',
-        autoDismiss: 1
+        position: "tr",
+        autoDismiss: 1,
       };
 
       if (response.data.success === true) {
         dispatch(success(successfulOptions));
 
         if (search)
-          return dispatch(searchMerchants({ name: 'merchant', value: search })); // update search list if this is a search result
+          return dispatch(searchMerchants({ name: "merchant", value: search })); // update search list if this is a search result
 
-        dispatch(fetchMerchants('merchant', page));
+        dispatch(fetchMerchants("merchant", page));
 
         // dispatch({
         //   type: REMOVE_MERCHANT,

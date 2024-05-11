@@ -17,7 +17,7 @@ import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 
 const OrderItems = (props) => {
   const { order, user, updateOrderItemStatus } = props;
-  
+
   const renderPopoverContent = (item) => {
     const statuses = Object.values(CART_ITEM_STATUS);
 

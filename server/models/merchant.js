@@ -1,6 +1,6 @@
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
-const { MERCHANT_STATUS } = require('../constants');
+const { MERCHANT_STATUS } = require("../constants");
 
 const { Schema } = Mongoose;
 
@@ -8,29 +8,29 @@ const { Schema } = Mongoose;
 const MerchantSchema = new Schema({
   name: {
     type: String,
-    trim: true
+    trim: true,
   },
   email: {
-    type: String
+    type: String,
   },
   phoneNumber: {
-    type: String
+    type: String,
   },
   brandName: {
-    type: String
+    type: String,
   },
   business: {
     type: String,
-    trim: true
+    trim: true,
   },
   isActive: {
     type: Boolean,
-    default: false
+    default: false,
   },
   brand: {
     type: Schema.Types.ObjectId,
-    ref: 'Brand',
-    default: null
+    ref: "Brand",
+    default: null,
   },
   status: {
     type: String,
@@ -38,14 +38,18 @@ const MerchantSchema = new Schema({
     enum: [
       MERCHANT_STATUS.Waiting_Approval,
       MERCHANT_STATUS.Rejected,
-      MERCHANT_STATUS.Approved
-    ]
+      MERCHANT_STATUS.Approved,
+    ],
   },
   updated: Date,
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
+  branch: {
+    type: String,
+    default: "",
+  },
 });
 
-module.exports = Mongoose.model('Merchant', MerchantSchema);
+module.exports = Mongoose.model("Merchant", MerchantSchema);

@@ -123,7 +123,7 @@ const OrderDetails = (props) => {
   };
 
   const renderLocationUpdate = () => {
-    const isAdmin = user.role === ROLES.Admin;
+    const isAdmin = user.role === ROLES.Merchant;
     return (
       <>
         {isAdmin && (

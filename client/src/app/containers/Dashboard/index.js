@@ -4,19 +4,19 @@
  *
  */
 
-import React from 'react';
+import React from "react";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import actions from '../../actions';
-import { ROLES } from '../../constants';
-import dashboardLinks from './links.json';
-import { isDisabledMerchantAccount } from '../../utils/app';
-import Admin from '../../components/Manager/Dashboard/Admin';
-import Merchant from '../../components/Manager/Dashboard/Merchant';
-import Customer from '../../components/Manager/Dashboard/Customer';
-import DisabledMerchantAccount from '../../components/Manager/DisabledAccount/Merchant';
-import LoadingIndicator from '../../components/Common/LoadingIndicator';
+import actions from "../../actions";
+import { ROLES } from "../../constants";
+import dashboardLinks from "./links.json";
+import { isDisabledMerchantAccount } from "../../utils/app";
+import Admin from "../../components/Manager/Dashboard/Admin";
+import Merchant from "../../components/Manager/Dashboard/Merchant";
+import Customer from "../../components/Manager/Dashboard/Customer";
+import DisabledMerchantAccount from "../../components/Manager/DisabledAccount/Merchant";
+import LoadingIndicator from "../../components/Common/LoadingIndicator";
 
 class Dashboard extends React.PureComponent {
   componentDidMount() {
@@ -60,11 +60,11 @@ class Dashboard extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.account.user,
     isLoading: state.account.isLoading,
-    isMenuOpen: state.dashboard.isMenuOpen
+    isMenuOpen: state.dashboard.isMenuOpen,
   };
 };
 

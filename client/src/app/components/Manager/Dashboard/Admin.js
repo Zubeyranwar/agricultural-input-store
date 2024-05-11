@@ -6,24 +6,23 @@
 
 import React, { useEffect } from "react";
 
-import { Switch, Route } from "react-router-dom";
-import { Row, Col } from "reactstrap";
+import { Route, Switch } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 
-import AccountMenu from "../AccountMenu";
 import Page404 from "../../Common/Page404";
+import AccountMenu from "../AccountMenu";
 
 import Account from "../../../containers/Account";
 import AccountSecurity from "../../../containers/AccountSecurity";
 import Address from "../../../containers/Address";
-import Order from "../../../containers/Order";
-import Users from "../../../containers/Users";
-import Category from "../../../containers/Category";
-import Product from "../../../containers/Product";
 import Brand from "../../../containers/Brand";
+import Category from "../../../containers/Category";
 import Merchant from "../../../containers/Merchant";
+import Order from "../../../containers/Order";
+import Product from "../../../containers/Product";
 import Review from "../../../containers/Review";
+import Users from "../../../containers/Users";
 import Wishlist from "../../../containers/WishList";
-import Staffs from "../../../containers/Staffs";
 
 import { fetchProducts } from "../../../containers/Product/actions";
 
@@ -52,10 +51,9 @@ const Admin = (props) => {
               <Route path="/dashboard/product" component={Product} />
               <Route path="/dashboard/category" component={Category} />
               <Route path="/dashboard/brand" component={Brand} />
-              <Route path="/dashboard/staff" component={Staffs} />
               <Route path="/dashboard/users" component={Users} />
               <Route path="/dashboard/merchant" component={Merchant} />
-              <Route path="/dashboard/orders" component={Order} />
+              <Route path="/dashboard/orders/customers" component={Order} />
               <Route path="/dashboard/review" component={Review} />
               <Route path="/dashboard/wishlist" component={Wishlist} />
               <Route path="*" component={Page404} />
