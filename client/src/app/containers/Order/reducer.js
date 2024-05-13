@@ -11,28 +11,28 @@ import {
   UPDATE_ORDER_STATUS,
   SET_ORDERS_LOADING,
   SET_ADVANCED_FILTERS,
-  CLEAR_ORDERS
-} from './constants';
+  CLEAR_ORDERS,
+} from "./constants";
 
 const initialState = {
   orders: [],
   searchedOrders: [],
   order: {
-    _id: '',
-    cartId: '',
+    _id: "",
+    cartId: "",
     products: [],
     totalTax: 0,
     total: 0,
-    status: '',
-    locations:[],
-    user: ''
+    status: "",
+    locations: [],
+    user: "",
   },
   isLoading: false,
   advancedFilters: {
     totalPages: 1,
     currentPage: 1,
-    count: 0
-  }
+    count: 0,
+  },
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -40,29 +40,29 @@ const orderReducer = (state = initialState, action) => {
     case FETCH_ORDERS:
       return {
         ...state,
-        orders: action.payload
+        orders: action.payload,
       };
     case FETCH_SEARCHED_ORDERS:
       return {
         ...state,
-        searchedOrders: action.payload
+        searchedOrders: action.payload,
       };
     case FETCH_ORDER:
       return {
         ...state,
-        order: action.payload
+        order: action.payload,
       };
     case SET_ADVANCED_FILTERS:
       return {
         ...state,
         advancedFilters: {
           ...state.advancedFilters,
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     case UPDATE_ORDER_STATUS:
       const itemIndex = state.order.products.findIndex(
-        item => item._id === action.payload.itemId
+        (item) => item._id === action.payload.itemId
       );
 
       const newProducts = [...state.order.products];
@@ -71,18 +71,18 @@ const orderReducer = (state = initialState, action) => {
         ...state,
         order: {
           ...state.order,
-          products: newProducts
-        }
+          products: newProducts,
+        },
       };
     case SET_ORDERS_LOADING:
       return {
         ...state,
-        isLoading: action.payload
+        isLoading: action.payload,
       };
     case CLEAR_ORDERS:
       return {
         ...state,
-        orders: []
+        orders: [],
       };
     default:
       return state;

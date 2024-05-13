@@ -112,7 +112,7 @@ router.get("/:userId", auth, async (req, res) => {
     const userId = req.params.userId;
 
     // Find user by userID
-    const user = await User.findById(userId, { firstName: 1, lastName: 1 });
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({
@@ -123,6 +123,7 @@ router.get("/:userId", auth, async (req, res) => {
     res.status(200).json({
       firstName: user.firstName,
       lastName: user.lastName,
+      branchBelong: user.branchBelong,
     });
   } catch (error) {
     res.status(400).json({

@@ -123,7 +123,7 @@ const OrderDetails = (props) => {
   };
 
   const renderLocationUpdate = () => {
-    const isAdmin = user.role === ROLES.Merchant;
+    const isAdmin = user.role != ROLES.Member;
     return (
       <>
         {isAdmin && (
@@ -164,7 +164,12 @@ const OrderDetails = (props) => {
     <div className="order-details">
       <Row>
         <Col xs="12" md="12">
-          <OrderMeta order={order} cancelOrder={cancelOrder} onBack={onBack} />
+          <OrderMeta
+            order={order}
+            cancelOrder={cancelOrder}
+            onBack={onBack}
+            user={user}
+          />
         </Col>
       </Row>
       <Row className="mt-5">

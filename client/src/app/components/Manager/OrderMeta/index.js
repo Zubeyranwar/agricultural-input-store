@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { API_URL } from "../../../constants";
+import { API_URL, ROLES } from "../../../constants";
 
 import { Col, Row } from "reactstrap";
 
@@ -16,15 +16,16 @@ import Button from "../../Common/Button";
 import { ArrowBackIcon } from "../../Common/Icon";
 
 const OrderMeta = (props) => {
-  const { order, cancelOrder, onBack } = props;
+  const { order, user, cancelOrder, onBack } = props;
   const [userName, setUserName] = useState("");
-  console.log(order.user);
+  console.log(order);
 
   useEffect(() => {
     const fetchUserName = async () => {
       try {
         const response = await axios.get(`${API_URL}/user/${order.user}`);
         const { firstName, lastName } = response.data;
+        console.log(response.data);
         setUserName(`${firstName} ${lastName}`);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -77,14 +78,18 @@ const OrderMeta = (props) => {
               )}`}</span>
             </Col>
           </Row>
-          <Row>
-            <Col xs="4">
-              <p className="one-line-ellipsis">User</p>
-            </Col>
-            <Col xs="8">
-              <span className="order-label one-line-ellipsis">{userName}</span>
-            </Col>
-          </Row>
+          {(user.role === ROLES.Admin || user.role === ROLES.Merchant) && (
+            <Row>
+              <Col xs="4">
+                <p className="one-line-ellipsis">User</p>
+              </Col>
+              <Col xs="8">
+                <span className="order-label one-line-ellipsis">
+                  {userName}
+                </span>
+              </Col>
+            </Row>
+          )}
         </Col>
         <Col xs="12" md="4" className="text-left text-md-right">
           {renderMetaAction()}

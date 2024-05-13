@@ -6,20 +6,19 @@
 
 import React from "react";
 
-import { Switch, Route } from "react-router-dom";
-import { Row, Col } from "reactstrap";
+import { Route, Switch } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 
-import AccountMenu from "../AccountMenu";
 import Page404 from "../../Common/Page404";
+import AccountMenu from "../AccountMenu";
 
 import Account from "../../../containers/Account";
 import AccountSecurity from "../../../containers/AccountSecurity";
 import Address from "../../../containers/Address";
-import Users from "../../../containers/Users";
-import UserListBranch from "../../../containers/UserListBranch";
-import Product from "../../../containers/Product";
 import Brand from "../../../containers/Brand";
 import Order from "../../../containers/Order";
+import Product from "../../../containers/Product";
+import UserListBranch from "../../../containers/UserListBranch";
 import Wishlist from "../../../containers/WishList";
 
 const Merchant = (props) => {

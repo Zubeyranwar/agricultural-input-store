@@ -115,7 +115,8 @@ exports.formatOrders = orders => {
       _id: order._id,
       total: parseFloat(Number(order.total.toFixed(2))),
       created: order.created,
-      products: order?.cart?.products
+      products: order?.cart?.products,
+      user: order?.user,
     };
   });
 

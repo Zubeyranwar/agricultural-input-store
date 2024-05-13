@@ -11,7 +11,7 @@ import ReactStars from 'react-rating-stars-component';
 
 import { REVIEW_STATUS } from '../../../constants';
 import { formatDate } from '../../../utils/date';
-import { getRandomColors } from '../../../utils';
+import { getMemoizedRandomColors } from '../../../utils';
 import Button from '../../Common/Button';
 import { CheckIcon, RefreshIcon, TrashIcon } from '../../Common/Icon';
 
@@ -19,8 +19,8 @@ const ReviewList = props => {
   const { reviews, approveReview, rejectReview, deleteReview } = props;
 
   const getAvatar = review => {
-    const color = getRandomColors();
-    if (review.user.firstName) {
+    const color = getMemoizedRandomColors(review?.user?._id);
+    if (review?.user?.firstName) {
       return (
         <div
           className='d-flex flex-column justify-content-center align-items-center fw-normal text-white avatar'

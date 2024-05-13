@@ -209,7 +209,7 @@ router.get('/:orderId', auth, async (req, res) => {
 
     let orderDoc = null;
 
-    if (req.user.role === ROLES.Admin) {
+    if (req.user.role === ROLES.Admin || req.user.role === ROLES.Merchant) {
       orderDoc = await Order.findOne({ _id: orderId }).populate({
         path: 'cart',
         populate: {
