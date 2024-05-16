@@ -7,6 +7,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
+import { ROLES } from '../../constants';
 
 import actions from '../../actions';
 
@@ -49,7 +50,7 @@ class OrderPage extends React.PureComponent {
             updateOrderItemStatus={updateOrderItemStatus}
             onBack={() => {
               if (window.location.toString().includes('success')) {
-                history.push('/dashboard/orders');
+                user.role === ROLES.Admin ? history.push('/dashboard/orders/customer'):history.push('/dashboard/orders') ;
               } else {
                 history.goBack();
               }

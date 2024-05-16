@@ -74,7 +74,7 @@ class List extends React.PureComponent {
     return (
       <div className='merchant-dashboard'>
         <SubPage
-          title={'Merchants'}
+          title={'Branch Staff'}
           actionTitle={user.role === ROLES.Admin && 'Add'}
           handleAction={() => history.push('/dashboard/merchant/add')}
         />
@@ -92,7 +92,7 @@ class List extends React.PureComponent {
               />
             )}
             <SearchResultMeta
-              label='merchants'
+              label='branchs'
               count={
                 isSearch ? filteredMerchants.length : advancedFilters.count
               }
@@ -115,7 +115,7 @@ class List extends React.PureComponent {
           </>
         )}
         {!isLoading && !displayMerchants && (
-          <NotFound message='No merchants found.' />
+          <NotFound message='No branch found.' />
         )}
       </div>
     );

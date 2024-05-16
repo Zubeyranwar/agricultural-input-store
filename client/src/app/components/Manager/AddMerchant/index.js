@@ -82,7 +82,7 @@ const AddMerchant = (props) => {
               }}
             />
           </Col>
-          <Col xs="12">
+          {/* <Col xs="12">
             <Input
               type={"text"}
               error={formErrors["brandName"]}
@@ -94,8 +94,8 @@ const AddMerchant = (props) => {
                 merchantChange(name, value);
               }}
             />
-          </Col>
-          <Col xs="12">
+          </Col> */}
+          {/* <Col xs="12">
             <Input
               type={"textarea"}
               error={formErrors["business"]}
@@ -107,7 +107,7 @@ const AddMerchant = (props) => {
                 merchantChange(name, value);
               }}
             />
-          </Col>
+          </Col> */}
         </Row>
         <hr />
         <div className="add-merchant-actions">

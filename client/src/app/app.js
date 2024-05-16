@@ -64,7 +64,7 @@ const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchAllOrdersAction());
-    }, 3000000);
+    }, 30000);
 
     return () => clearInterval(fetchInterval);
   }, []);

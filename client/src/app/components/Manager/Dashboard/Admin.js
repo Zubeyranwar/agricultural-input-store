@@ -32,7 +32,7 @@ const Admin = (props) => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
       store.dispatch(fetchProducts());
-    }, 100000000);
+    }, 30000);
 
     return () => clearInterval(fetchInterval);
   }, []);
@@ -53,7 +53,7 @@ const Admin = (props) => {
               <Route path="/dashboard/brand" component={Brand} />
               <Route path="/dashboard/users" component={Users} />
               <Route path="/dashboard/merchant" component={Merchant} />
-              <Route path="/dashboard/orders" component={Order} />
+              <Route path="/dashboard/orders/customers" component={Order} />
               <Route path="/dashboard/review" component={Review} />
               <Route path="/dashboard/wishlist" component={Wishlist} />
               <Route path="*" component={Page404} />

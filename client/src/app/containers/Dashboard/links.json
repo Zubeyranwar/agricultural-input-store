@@ -13,7 +13,7 @@
     { "to": "/brand", "name": "Brand", "prefix": "/dashboard" },
     { "to": "/users", "name": "Users", "prefix": "/dashboard" },
     { "to": "/merchant", "name": "Staffs", "prefix": "/dashboard" },
-    { "to": "/orders", "name": "Orders", "prefix": "/dashboard" },
+    { "to": "/orders/customers", "name": "Orders", "prefix": "/dashboard" },
     { "to": "/review", "name": "Reviews", "prefix": "/dashboard" },
     { "to": "/wishlist", "name": "WishList", "prefix": "/dashboard" },
     { "to": "/support", "name": "Support" }
@@ -28,8 +28,6 @@
     },
     { "to": "/address", "name": "Address", "prefix": "/dashboard" },
     { "to": "/usersBranch", "name": "Users", "prefix": "/dashboard" },
-    { "to": "/brand", "name": "Brand", "prefix": "/dashboard" },
-    { "to": "/product", "name": "Products", "prefix": "/dashboard" },
     { "to": "/orders", "name": "Orders", "prefix": "/dashboard" },
     { "to": "/wishlist", "name": "WishList", "prefix": "/dashboard" },
     { "to": "/support", "name": "Support" }

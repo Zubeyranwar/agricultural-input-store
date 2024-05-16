@@ -73,9 +73,9 @@ class Customer extends React.PureComponent {
       <div className="order-dashboard">
         <SubPage
           title="Customer Orders"
-          actionTitle="My Orders"
+          actionTitle={(user.role !== ROLES.Admin) && "My Orders"}
           handleAction={() =>
-            (user.role === ROLES.Admin || user.role === ROLES.Merchant) &&
+            (user.role === ROLES.Merchant) &&
             history.push("/dashboard/orders")
           }
         >

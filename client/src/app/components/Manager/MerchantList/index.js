@@ -24,14 +24,14 @@ const MerchantList = (props) => {
     <div className="p-2">
       <p className="text-gray text-14">
         {merchant.isActive
-          ? "Disabling merchant account will disable merchant's brand and account access."
-          : "Enabling merchant account will restore merchant account access."}
+          ? "Disabling branch account will disable branch's account access."
+          : "Enabling branch account will restore branch account access."}
       </p>
       <Button
         variant="dark"
         size="sm"
         className="w-100"
-        text={merchant.isActive ? "Disable Merchant" : "Enable Merchant"}
+        text={merchant.isActive ? "Disable Branch" : "Enable Branch"}
         onClick={() => disableMerchant(merchant, !merchant.isActive)}
       />
     </div>
@@ -42,12 +42,12 @@ const MerchantList = (props) => {
       {merchants.map((merchant, index) => (
         <div key={index} className="merchant-box">
           <div className="mb-3 p-4">
-            <label className="text-black">Business</label>
-            <p className="fw-medium text-truncate">{merchant.business}</p>
+            {/* <label className="text-black">Business</label>
+            <p className="fw-medium text-truncate">{merchant.business}</p> */}
             <label className="text-black">Branch</label>
             <p className="text-truncate">{merchant.branch}</p>
-            <label className="text-black">Brand</label>
-            <p className="text-truncate">{merchant.brandName}</p>
+            {/* <label className="text-black">Brand</label>
+            <p className="text-truncate">{merchant.brandName}</p> */}
             <label className="text-black">Name</label>
             <p className="text-truncate">{merchant.name}</p>
             <label className="text-black">Email</label>
@@ -86,12 +86,12 @@ const MerchantList = (props) => {
                   className="w-100 mt-3"
                   size="sm"
                   text={
-                    merchant.isActive ? "Disable Merchant" : "Enable Merchant"
+                    merchant.isActive ? "Disable Branch Staff" : "Enable Branch Staff"
                   }
                   popover={true}
                   popoverTitle={`Are you sure you want to ${
                     merchant.isActive ? "disable" : "enable"
-                  } ${merchant.name}'s merchant account?`}
+                  } ${merchant.name}'s branch staff account?`}
                   popoverContent={renderMerchantPopover(merchant)}
                 />
               </>
@@ -160,7 +160,7 @@ const MerchantList = (props) => {
             ) : (
               <>
                 <p className="text-truncate">
-                  Merchant doesn't have email. Call at
+                  Branch staff doesn't have email. Call at
                   <a
                     href={`tel:${merchant.phoneNumber}`}
                     className="text-primary"
