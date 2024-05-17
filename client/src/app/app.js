@@ -63,7 +63,9 @@ if (token) {
 const app = () => {
   useEffect(() => {
     const fetchInterval = setInterval(() => {
-      store.dispatch(fetchAllOrdersAction());
+      if(token){
+        store.dispatch(fetchAllOrdersAction());
+      }
     }, 30000);
 
     return () => clearInterval(fetchInterval);

@@ -194,47 +194,42 @@ export const fetchProducts = () => {
       const response = await axios.get(`${API_URL}/product`);
 
       const products = response.data.products;
-      // console.log(products);
-
-      const productsWithExpiration = products.forEach((product) => {
+      const productsWithExpiration = await Promise.all(products.map(async (product) => {
         const expirationDate = product.expirationDate.split("T")[0];
         const expirationDateObj = new Date(expirationDate);
-
+      
         const timeDiff = expirationDateObj.getTime() - Date.now();
-
+      
         const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
+      
         const isCloseToExpiration = daysLeft < 0;
-        const isWithinRange = daysLeft <= 30 && daysLeft >= 7;
-
+        const isWithinRange = daysLeft <= 30 ;
+      
         // If the product is within the specified range, display a notification
-        if(isCloseToExpiration){
-          const productName = product.name;
-
-          const notificationMessage = `Product "${productName}" is expired `;
-
-          const notificationOptions = {
-            title: notificationMessage,
-            position: "tr",
-            autoDismiss: 10,
-          };
-
-          dispatch(warning(notificationOptions));
+        if (isCloseToExpiration) {
+          try {
+            await axios.delete(`${API_URL}/product/delete/${product._id}`);
+          } catch (error) {
+            console.error("Error deleting expired product:", error);
+          }
         }
         if (isWithinRange) {
           const productName = product.name;
-
+      
           const notificationMessage = `Product "${productName}" expiration is approaching. Days left: ${daysLeft}`;
-
+      
           const notificationOptions = {
             title: notificationMessage,
             position: "tr",
             autoDismiss: 10,
           };
-
+      
           dispatch(warning(notificationOptions));
-        } 
-      });
+        }
+      }));
+      
+      // console.log(products);
+
 
       dispatch({
         type: FETCH_PRODUCTS,
