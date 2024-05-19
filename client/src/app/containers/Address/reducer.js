@@ -22,18 +22,18 @@ const initialState = {
   addressFormData: {
     address: '',
     city: '',
-    state: '',
-    country: '',
-    zipCode: '',
+    region: '',
+    zone: '',
+    kebele: '',
     isDefault: false
   },
   address: {
     _id: '',
     address: '',
     city: '',
-    state: '',
-    country: '',
-    zipCode: '',
+    region: '',
+    zone: '',
+    kebele: '',
     isDefault: false
   },
   formErrors: {},
@@ -99,9 +99,9 @@ const addressReducer = (state = initialState, action) => {
         addressFormData: {
           address: '',
           city: '',
-          state: '',
-          country: '',
-          zipCode: '',
+          region: '',
+          zone: '',
+          kebele: '',
           isDefault: false
         },
         formErrors: {}

@@ -72,7 +72,6 @@ export const addMerchant = (isBack = false) => {
         name: "required",
         email: "required|email",
         phoneNumber: ["required", `regex:${phoneno}`],
-        brandName: "required",
         business: "required|min:10",
         branch: "required",
       };
@@ -85,15 +84,13 @@ export const addMerchant = (isBack = false) => {
         "email.email": "Email format is invalid.",
         "required.phoneNumber": "Phone number is required.",
         "regex.phoneNumber": "Phone number format is invalid.",
-        "required.brandName": "Brand is required.",
-        "required.business": "Business is required.",
-        "min.business": "Business must be at least 10 characters.",
         "required.branch": "Branch is required.",
       });
+      console.log(isValid)
 
-      if (!isValid) {
-        return dispatch({ type: SET_MERCHANT_FORM_ERRORS, payload: errors });
-      }
+      // if (!isValid) {
+      //   return dispatch({ type: SET_MERCHANT_FORM_ERRORS, payload: errors });
+      // }
 
       dispatch(setMerchantLoading(true));
       dispatch(setMerchantSubmitting(true));

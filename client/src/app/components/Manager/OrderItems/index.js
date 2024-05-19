@@ -4,10 +4,13 @@
  *
  */
 
-import React from "react";
+import React,{useState, useEffect} from "react";
 
 import { Link } from "react-router-dom";
 import { Col, DropdownItem, Row } from "reactstrap";
+
+import axios from "axios";
+import { API_URL } from "../../../constants";
 
 import { CART_ITEM_STATUS, ROLES } from "../../../constants";
 import Button from "../../Common/Button";
@@ -17,6 +20,23 @@ import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 
 const OrderItems = (props) => {
   const { order, user, updateOrderItemStatus } = props;
+  const [userInfo, setUserInfo] = useState("");
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/user/${order.user}`);
+        const { merchant } = response.data;
+        console.log(merchant)
+        console.log(response.data);
+        setUserInfo(merchant);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, [order.user]);
 
   const renderPopoverContent = (item) => {
     const statuses = Object.values(CART_ITEM_STATUS);
@@ -37,7 +57,7 @@ const OrderItems = (props) => {
   };
 
   const renderItemsAction = (item) => {
-    const isAdmin = user.role === ROLES.Admin;
+    const isAdmin = user.role === ROLES.Admin || (user.role === ROLES.Merchant && userInfo===null) ;
 
     if (item.status === CART_ITEM_STATUS.Delivered) {
       return (

@@ -25,7 +25,7 @@ const OrderMeta = (props) => {
       try {
         const response = await axios.get(`${API_URL}/user/${order.user}`);
         const { firstName, lastName } = response.data;
-        console.log(response.data);
+        // console.log(response.data);
         setUserName(`${firstName} ${lastName}`);
       } catch (error) {
         console.error("Error fetching user:", error);

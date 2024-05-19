@@ -54,11 +54,11 @@ const EditAddress = props => {
           <Col xs='12' lg='6'>
             <Input
               type={'text'}
-              error={formErrors['state']}
-              label={'State'}
-              name={'state'}
-              placeholder={'State'}
-              value={address.state}
+              error={formErrors['region']}
+              label={'Region'}
+              name={'region'}
+              placeholder={'Region'}
+              value={address.region}
               onInputChange={(name, value) => {
                 addressChange(name, value);
               }}
@@ -67,11 +67,11 @@ const EditAddress = props => {
           <Col xs='12' lg='6'>
             <Input
               type={'text'}
-              error={formErrors['country']}
-              label={'Country'}
-              name={'country'}
-              placeholder={'Please Enter Your Country'}
-              value={address.country}
+              error={formErrors['zone']}
+              label={'Zone'}
+              name={'zone'}
+              placeholder={'Please Enter Your Zone'}
+              value={address.zone}
               onInputChange={(name, value) => {
                 addressChange(name, value);
               }}
@@ -80,11 +80,11 @@ const EditAddress = props => {
           <Col xs='12' lg='6'>
             <Input
               type={'text'}
-              error={formErrors['zipCode']}
-              label={'Zipcode'}
-              name={'zipCode'}
-              placeholder={'Please Enter Your Zipcode'}
-              value={address.zipCode}
+              error={formErrors['kebele']}
+              label={'Kebele'}
+              name={'kebele'}
+              placeholder={'Please Enter Your Kebele'}
+              value={address.kebele}
               onInputChange={(name, value) => {
                 addressChange(name, value);
               }}

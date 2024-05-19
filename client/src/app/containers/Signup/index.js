@@ -5,13 +5,10 @@
  */
 
 import React from 'react';
-
 import { connect } from 'react-redux';
 import { Row, Col } from 'reactstrap';
 import { Redirect, Link } from 'react-router-dom';
-
 import actions from '../../actions';
-
 import Input from '../../components/Common/Input';
 import Button from '../../components/Common/Button';
 import Checkbox from '../../components/Common/Checkbox';
@@ -19,6 +16,33 @@ import LoadingIndicator from '../../components/Common/LoadingIndicator';
 import SignupProvider from '../../components/Common/SignupProvider';
 
 class Signup extends React.PureComponent {
+  state = {
+    passwordMatchError: '',
+    confirmPassword: '' // Local state for confirmPassword
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { password } = this.props.signupFormData;
+
+    if (password !== this.state.confirmPassword) {
+      this.setState({ passwordMatchError: 'Passwords do not match' });
+      return;
+    }
+
+    this.props.signUp();
+  };
+
+  handleConfirmPasswordChange = (name, value) => {
+    const { password } = this.props.signupFormData;
+    if (password !== value) {
+      this.setState({ passwordMatchError: 'Passwords do not match' });
+    } else {
+      this.setState({ passwordMatchError: '' });
+    }
+    this.setState({ confirmPassword: value });
+  };
+
   render() {
     const {
       authenticated,
@@ -34,17 +58,12 @@ class Signup extends React.PureComponent {
 
     if (authenticated) return <Redirect to='/dashboard' />;
 
-    const handleSubmit = event => {
-      event.preventDefault();
-      signUp();
-    };
-
     return (
       <div className='signup-form'>
         {isLoading && <LoadingIndicator />}
         <h2>Sign Up</h2>
         <hr />
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={this.handleSubmit} noValidate>
           <Row>
             <Col
               xs={{ size: 12, order: 2 }}
@@ -100,6 +119,19 @@ class Signup extends React.PureComponent {
                   value={signupFormData.password}
                   onInputChange={(name, value) => {
                     signupChange(name, value);
+                  }}
+                />
+              </Col>
+              <Col xs='12' md='12'>
+                <Input
+                  type={'password'}
+                  label={'Confirm Password'}
+                  error={this.state.passwordMatchError}
+                  name={'confirmPassword'}
+                  placeholder={'Please Enter Your Password Again'}
+                  value={this.state.confirmPassword}
+                  onInputChange={(name, value) => {
+                    this.handleConfirmPasswordChange(name, value);
                   }}
                 />
               </Col>

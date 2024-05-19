@@ -26,11 +26,11 @@ router.post("/add", async (req, res) => {
     if (!branch) {
       return res.status(400).json({ error: "You must enter a branch ." });
     }
-    if (!business) {
-      return res
-        .status(400)
-        .json({ error: "You must enter a business description." });
-    }
+    // if (!business) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "You must enter a business description." });
+    // }
 
     if (!phoneNumber || !email) {
       return res

@@ -95,9 +95,9 @@ export const addAddress = () => {
       const rules = {
         address: 'required',
         city: 'required',
-        state: 'required',
-        country: 'required',
-        zipCode: 'required|min:5'
+        region: 'required',
+        zone: 'required',
+        kebele: 'required|min:5'
       };
 
       const newAddress = getState().address.addressFormData;
@@ -106,9 +106,9 @@ export const addAddress = () => {
       const { isValid, errors } = allFieldsValidation(newAddress, rules, {
         'required.address': 'Address is required.',
         'required.city': 'City is required.',
-        'required.state': 'State is required.',
-        'required.country': 'Country is required.',
-        'required.zipCode': 'Zipcode is required.'
+        'required.region': 'Region is required.',
+        'required.zone': 'Zone is required.',
+        'required.kebele': 'Kebele is required.'
       });
 
       if (!isValid) {
@@ -148,11 +148,11 @@ export const updateAddress = () => {
   return async (dispatch, getState) => {
     try {
       const rules = {
-        country: 'required',
+        zone: 'required',
         city: 'required',
-        state: 'required',
+        region: 'required',
         address: 'required',
-        zipCode: 'required'
+        kebele: 'required'
       };
 
       const newAddress = getState().address.address;
@@ -160,9 +160,9 @@ export const updateAddress = () => {
       const { isValid, errors } = allFieldsValidation(newAddress, rules, {
         'required.address': 'Address is required.',
         'required.city': 'City is required.',
-        'required.state': 'State is required.',
-        'required.country': 'Country is required.',
-        'required.zipCode': 'Zipcode is required.'
+        'required.region': 'Region is required.',
+        'required.zone': 'Zone is required.',
+        'required.kebele': 'Kebele is required.'
       });
 
       if (!isValid) {

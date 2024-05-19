@@ -13,13 +13,13 @@ const AddressSchema = new Schema({
   city: {
     type: String,
   },
-  state: {
+  region: {
     type: String,
   },
-  country: {
+  zone: {
     type: String,
   },
-  zipCode: {
+  kebele: {
     type: String,
   },
   isDefault: {

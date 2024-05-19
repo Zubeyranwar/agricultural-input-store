@@ -113,6 +113,7 @@ router.get("/:userId", auth, async (req, res) => {
 
     // Find user by userID
     const user = await User.findById(userId);
+    console.log(user)
 
     if (!user) {
       return res.status(404).json({
@@ -121,6 +122,7 @@ router.get("/:userId", auth, async (req, res) => {
     }
 
     res.status(200).json({
+      merchant:user.merchant,
       firstName: user.firstName,
       lastName: user.lastName,
       branchBelong: user.branchBelong,
