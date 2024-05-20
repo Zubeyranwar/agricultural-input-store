@@ -113,7 +113,7 @@ router.get("/:userId", auth, async (req, res) => {
 
     // Find user by userID
     const user = await User.findById(userId);
-    console.log(user)
+    // console.log(user)
 
     if (!user) {
       return res.status(404).json({

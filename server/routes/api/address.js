@@ -102,26 +102,18 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-router.get("/:userId", auth, async (req, res) => {
+router.get('/user/:userId', auth, async (req, res) => {
   try {
     const userId = req.params.userId;
-
-    // Find user by userID
-    const defaultAddress = await Address.findById(userId, { isDefault: true });
-
-    if (!defaultAddress) {
-      return res.status(404).json({
-        error: "Address is not found.",
-      });
+    const address = await Address.findOne({ user: userId, isDefault: true }); // Fetch the default address for the user
+    console.log(address)
+    if (!address) {
+      return res.status(404).json({ error: 'Address not found.' });
     }
 
-    res.status(200).json({
-      defaultAddress,
-    });
+    res.status(200).json({ address });
   } catch (error) {
-    res.status(400).json({
-      error: "Your request could not be processed. Please try again.",
-    });
+    res.status(400).json({ error: 'Your request could not be processed. Please try again.' });
   }
 });
 

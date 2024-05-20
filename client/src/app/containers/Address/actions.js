@@ -97,7 +97,7 @@ export const addAddress = () => {
         city: 'required',
         region: 'required',
         zone: 'required',
-        kebele: 'required|min:5'
+        kebele: 'required|min:2'
       };
 
       const newAddress = getState().address.addressFormData;
