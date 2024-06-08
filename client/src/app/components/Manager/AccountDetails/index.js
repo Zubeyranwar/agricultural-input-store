@@ -13,6 +13,15 @@ import UserRole from "../UserRole";
 import Input from "../../Common/Input";
 import Button from "../../Common/Button";
 import { ROLES } from "../../../constants";
+import SelectOption from "../../Common/SelectOption";
+
+const branches = [
+  { value: "Wollo", label: "Wollo" },
+  { value: "Gerado", label: "Gerado" },
+  { value: "Shasmene", label: "Shasmene" },
+  { value: "Harar", label: "Harar" },
+  { value: "Gojam", label: "Gojam" },
+];
 
 const AccountDetails = (props) => {
   const { user, accountChange, updateProfile } = props;
@@ -20,6 +29,10 @@ const AccountDetails = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     updateProfile();
+  };
+
+  const handleSelectChange = (selectedOption) => {
+    accountChange("branchBelong", selectedOption ? selectedOption.value : "");
   };
 
   return (
@@ -92,15 +105,15 @@ const AccountDetails = (props) => {
 
           {user.role === ROLES.Member && (
             <Col xs="12" md="12">
-              <Input
-                type={"text"}
+              <SelectOption
                 label={"Branch"}
-                name={"branchBelong"}
-                placeholder={"Please Enter Your Branch"}
-                value={user.branchBelong ? user.branchBelong : ""}
-                onInputChange={(name, value) => {
-                  accountChange(name, value);
-                }}
+                options={branches}
+                value={
+                  branches.find(
+                    (branch) => branch.value === user.branchBelong
+                  ) || ""
+                }
+                handleSelectChange={handleSelectChange}
               />
             </Col>
           )}

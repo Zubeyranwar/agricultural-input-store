@@ -44,7 +44,9 @@ const OrderDetails = (props) => {
       const response = await axios.get(`${API_URL}/address/user/${order.user}`);
       const defaultAddress = response.data.address;
       if (defaultAddress) {
-        setShippingAddress(`${defaultAddress?.address} , ${defaultAddress?.region}, ${defaultAddress?.zone}, ${defaultAddress?.kebele}, ${defaultAddress?.city}`);
+        setShippingAddress(
+          `${defaultAddress?.address} , ${defaultAddress?.region}, ${defaultAddress?.zone}, ${defaultAddress?.kebele}, ${defaultAddress?.city}`
+        );
       } else {
         console.log("No default address found.");
       }
@@ -189,7 +191,7 @@ const OrderDetails = (props) => {
             <p>
               Delivery Current Address: {currentLocationText || " At Store"}{" "}
             </p>
-            {renderLocationUpdate()}
+            {/* {renderLocationUpdate()} */}
           </div>
         </Col>
         <Col xs="12" lg="4" className="mt-5 mt-lg-0">

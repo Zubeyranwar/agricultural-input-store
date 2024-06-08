@@ -12,6 +12,7 @@ import UserRole from "../UserRole";
 
 const UserList = (props) => {
   const { users } = props;
+  console.log(users);
 
   return (
     <div className="u-list">
@@ -23,6 +24,12 @@ const UserList = (props) => {
           </p>
           <label className="text-black">Email</label>
           <p>{user?.email ?? "-"}</p>
+          {user.role === ROLES.Member && (
+            <>
+              <label className="text-black">Branch</label>
+              <p>{user?.branchBelong ?? "-"}</p>
+            </>
+          )}
           <label className="text-black">Provider</label>
           <p>{user?.provider}</p>
           <label className="text-black">Account Created</label>

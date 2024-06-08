@@ -1,8 +1,9 @@
 // start input text styles
-input[type='text'],
-input[type='number'],
-input[type='password'],
-input[type='file'],
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="file"],
+input[type="date"],
 textarea {
   width: 100%;
   padding: 8px 10px;
@@ -74,10 +75,11 @@ body.user-is-tabbing textarea {
 .input-box {
   margin: 10px 0px;
 
-  input[type='text'],
-  input[type='number'],
-  input[type='password'],
-  input[type='file'] {
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="file"],
+  input[type="date"] {
     height: 45px;
   }
 

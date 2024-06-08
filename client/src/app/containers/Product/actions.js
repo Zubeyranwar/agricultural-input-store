@@ -194,42 +194,43 @@ export const fetchProducts = () => {
       const response = await axios.get(`${API_URL}/product`);
 
       const products = response.data.products;
-      const productsWithExpiration = await Promise.all(products.map(async (product) => {
-        const expirationDate = product.expirationDate.split("T")[0];
-        const expirationDateObj = new Date(expirationDate);
-      
-        const timeDiff = expirationDateObj.getTime() - Date.now();
-      
-        const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      
-        const isCloseToExpiration = daysLeft < 0;
-        const isWithinRange = daysLeft <= 30 ;
-      
-        // If the product is within the specified range, display a notification
-        if (isCloseToExpiration) {
-          try {
-            await axios.delete(`${API_URL}/product/delete/${product._id}`);
-          } catch (error) {
-            console.error("Error deleting expired product:", error);
-          }
-        }
-        if (isWithinRange) {
-          const productName = product.name;
-      
-          const notificationMessage = `Product "${productName}" expiration is approaching. Days left: ${daysLeft}`;
-      
-          const notificationOptions = {
-            title: notificationMessage,
-            position: "tr",
-            autoDismiss: 10,
-          };
-      
-          dispatch(warning(notificationOptions));
-        }
-      }));
-      
-      // console.log(products);
+      const productsWithExpiration = await Promise.all(
+        products.map(async (product) => {
+          const expirationDate = product.expirationDate.split("T")[0];
+          const expirationDateObj = new Date(expirationDate);
 
+          const timeDiff = expirationDateObj.getTime() - Date.now();
+
+          const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+          const isCloseToExpiration = daysLeft < 0;
+          const isWithinRange = daysLeft <= 30;
+
+          // If the product is within the specified range, display a notification
+          if (isCloseToExpiration) {
+            try {
+              await axios.delete(`${API_URL}/product/delete/${product._id}`);
+            } catch (error) {
+              console.error("Error deleting expired product:", error);
+            }
+          }
+          if (isWithinRange) {
+            const productName = product.name;
+
+            const notificationMessage = `Product "${productName}" expiration is approaching. Days left: ${daysLeft}`;
+
+            const notificationOptions = {
+              title: notificationMessage,
+              position: "tr",
+              autoDismiss: 10,
+            };
+
+            dispatch(warning(notificationOptions));
+          }
+        })
+      );
+
+      // console.log(products);
 
       dispatch({
         type: FETCH_PRODUCTS,
@@ -286,7 +287,7 @@ export const addProduct = () => {
         taxable: "required",
         image: "required",
         brand: "required",
-        expirationDate: "required",
+        expirationDate: "required|date",
       };
 
       const product = getState().product.productFormData;
@@ -295,19 +296,13 @@ export const addProduct = () => {
 
       const brand = unformatSelectOptions([product.brand]);
 
-      const expirationDateLocale = new Date(
-        product.expirationDate
-      ).toLocaleString();
-      const expirationDateString = expirationDateLocale.substring(
-        0,
-        expirationDateLocale.indexOf("T")
-      );
+      const expirationDate = new Date(product.expirationDate).toLocaleString();
 
       const newProduct = {
         sku: product.sku,
         name: product.name,
         description: product.description,
-        expirationDate: expirationDateString,
+        expirationDate,
         price: product.price,
         quantity: product.quantity,
         image: product.image,
