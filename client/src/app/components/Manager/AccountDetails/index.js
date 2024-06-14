@@ -17,6 +17,7 @@ import SelectOption from "../../Common/SelectOption";
 
 const branches = [
   { value: "Wollo", label: "Wollo" },
+  { value: "Afar", label: "Afar" },
   { value: "Gerado", label: "Gerado" },
   { value: "Shasmene", label: "Shasmene" },
   { value: "Harar", label: "Harar" },

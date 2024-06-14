@@ -23,7 +23,7 @@ const OrderSchema = new Schema({
   locations: {
     type: Array,
     ref: "Location",
-    default: ["Store"],
+    default: ["Addis Ababa"],
   },
 });
 

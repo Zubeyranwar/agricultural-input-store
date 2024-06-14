@@ -66,7 +66,7 @@ const app = () => {
       if (token) {
         store.dispatch(fetchAllOrdersAction());
       }
-    }, 3000);
+    }, 10000);
 
     return () => clearInterval(fetchInterval);
   }, []);

@@ -24,6 +24,8 @@ import Review from "../../../containers/Review";
 import Users from "../../../containers/Users";
 import Wishlist from "../../../containers/WishList";
 
+import Analytics from "../../../containers/Analytics";
+
 import { fetchProducts } from "../../../containers/Product/actions";
 
 import store from "../../../store";
@@ -47,6 +49,7 @@ const Admin = (props) => {
             <Switch>
               <Route exact path="/dashboard" component={Account} />
               <Route path="/dashboard/security" component={AccountSecurity} />
+              <Route path="/dashboard/analytics" component={Analytics} />
               <Route path="/dashboard/address" component={Address} />
               <Route path="/dashboard/product" component={Product} />
               <Route path="/dashboard/category" component={Category} />

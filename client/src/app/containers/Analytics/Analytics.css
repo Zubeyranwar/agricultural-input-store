@@ -1,0 +1,31 @@
+.analytics-container {
+  margin: 20px;
+}
+
+.analytics-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.analytics-data {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.analytics-card {
+  background-color: #ffffffbb;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 200px;
+  margin: 10px;
+}
+
+.analytics-label {
+  font-weight: bold;
+}
+
+.analytics-value {
+  margin-top: 5px;
+}
